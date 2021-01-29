@@ -1,7 +1,8 @@
 import React ,{useState} from 'react';
 import QuestionCard from './components/QuestionCard';
-import {fetchQuizQuestions, QuestionState} from './API';
+import {fetchQuizQuestions, QuestionsState} from './API';
 import {Difficulty} from './API';
+import {GlobalStyle, Wrapper} from './App.styles';
 
 
 export type AnswerObject = {
@@ -13,7 +14,7 @@ export type AnswerObject = {
 const TOTAL_QUESTIONS = 10;
 const App = () => {
   const [loading, setLoading] = useState(false); // QuestionCard's Props
-  const [questions, setQuestions] = useState<QuestionState[]>([]); //<QuestionState[]>는 questions의 타입을 specifing 한다.
+  const [questions, setQuestions] = useState<QuestionsState[]>([]); //<QuestionState[]>는 questions의 타입을 specifing 한다.
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
@@ -63,17 +64,18 @@ const App = () => {
     }
   }
   return (
-    <div className="App">
+    <>
+    <GlobalStyle />
+    <Wrapper className="App">
       <h1>REACT QUIZ</h1>
       {gameOver || userAnswers.length === TOTAL_QUESTIONS ? ( // ||는 or을 의미한다.
       <button className="start" onClick={startTrivia}>
         Start
       </button>
   ) : null}
-      {!gameOver ? <p className="score">Score:</p> : null}
-      {loading && <p>Loading Question ...</p>}
+      {!gameOver ? <p className="score">Score: {score}</p> : null}
+      {loading ? <p>Loading Question ...</p> : null}
       {!loading && !gameOver && (
-
        <QuestionCard  
         questionNr={number + 1}
         totalQuestions={TOTAL_QUESTIONS}
@@ -88,8 +90,9 @@ const App = () => {
               Next Question
             </button>
       ) : null}
-    </div>
+    </Wrapper>
+    </>
   );
-}
+};
 
 export default App;
